@@ -2,7 +2,7 @@
  * Programma per la gestione di un conto corrente
  *
  * @author Scarsato Andrea
- * @version 1.2 07/11/2022
+ * @version 1.3 18/01/2023
  */
 
 import ai.quarta.Banca;

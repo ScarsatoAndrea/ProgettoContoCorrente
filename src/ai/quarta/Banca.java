@@ -1,16 +1,21 @@
 package ai.quarta;
 
+import java.util.ArrayList;
+
 public class Banca {
-    private final static int MAX_CONTI = 100;
-    private ContoCorrente[] conti;
-    private int n_conti;
+    private ArrayList<ContoCorrente> conti;
+
+    private static int nConti = 0;
+
+    private static int setNConti(){
+        return ++nConti;
+    }
 
     /**
      * costruttore che crea un vettore di ContoCorrente
      */
     public Banca(){
-        conti = new ContoCorrente[MAX_CONTI];
-        n_conti = 0;
+        conti = new ArrayList<>();
     }
 
     /**
@@ -21,14 +26,13 @@ public class Banca {
      * @return true se l'operazione è riuscita
      */
     public boolean creaConto(String nome, String cognome){
-        ContoCorrente c = new ContoCorrente(n_conti + 1, nome, cognome);
-        conti[n_conti] = c;
-        n_conti++;
+        ContoCorrente c = new ContoCorrente(setNConti() + 1, nome, cognome);
+        conti.add(c);
         return true;
     }
 
     public int numeroConti(){
-        return n_conti;
+        return conti.size();
     }
 
     /**
@@ -39,26 +43,21 @@ public class Banca {
      */
     public ContoCorrente[] ricercaPerCognome(String cognome){
         int contatore = 0;
-        for (int i = 0; i < n_conti; i++){
-            if (cognome.equals(conti[i].getCognome())){
-                contatore++;
+        ArrayList<ContoCorrente> c = new ArrayList<>();
+        for (int i = 0; i < conti.size(); i++){
+            if (cognome.equals(conti.get(i).getCognome())){
+               c.add(conti.get(i));
             }
         }
-        if (contatore == 0){
+        if (c.isEmpty()){
             System.out.println("Conto inesistente");
             return null;
         }
-        ContoCorrente[] contiCognome = new ContoCorrente[contatore];
-        int j = 0;
-        for (int i = 0; i < n_conti; i++) {
-            if (cognome.equals(conti[i].getCognome())){
-                contiCognome[j++] = conti[i];
-            }
-        }
-        return contiCognome;
+
+        return (ContoCorrente[]) c.toArray();
     }
 
     public ContoCorrente[] mostraConti (){
-        return conti;
+        return (ContoCorrente[]) conti.toArray();
     }
 }

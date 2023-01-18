@@ -1,16 +1,13 @@
 package ai.quarta;
 
+import java.util.ArrayList;
+
 public class ContoCorrente {
     private int numeroConto;
     private String nome;
     private String cognome;
     private float saldo;
-
-    private Movimento[] movimenti;
-
-    private int n_movimenti;
-
-    private static final int MAX_MOVIMENTI = 100;
+    private ArrayList<Movimento> movimenti;
 
     /**
      * costruttore della classe ContoCorrente che crea un nuovo conto, impostando dei valori
@@ -26,20 +23,18 @@ public class ContoCorrente {
         this.nome = nome;
         this.cognome = cognome;
         this.saldo = 0;
-        this.movimenti = new Movimento[MAX_MOVIMENTI];
-        this.n_movimenti = 0;
+        this.movimenti = new ArrayList<Movimento>();
     }
 
     /**
      * metodo per il deposito di una somma di denaro, crea un nuovo oggetto di
-     * tipo Movimento e lo mette nel vettore movimenti
+     * tipo Movimento e lo mette nell'arrylist di movimenti
      * @param importo somma depositata
      * @param descrizione motivo del deposito
      */
     public void deposita (float importo, String descrizione){
-        movimenti[n_movimenti] = new Movimento(descrizione, importo);
+        movimenti.add(new Movimento(descrizione, importo));
         saldo += importo;
-        n_movimenti++;
     }
 
     /**
@@ -53,14 +48,13 @@ public class ContoCorrente {
             System.out.println("Saldo insufficiente");
         }
         else{
-            movimenti[n_movimenti] = new Movimento(descrizione, -importo);
+            movimenti.add(new Movimento(descrizione, -importo));
             saldo -= importo;
-            n_movimenti++;
         }
     }
 
     public Movimento[] mostraMovimenti (){
-        return movimenti;
+        return (Movimento[]) movimenti.toArray();
     }
 
     public String getCognome() {
