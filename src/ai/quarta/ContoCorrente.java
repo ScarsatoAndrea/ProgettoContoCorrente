@@ -54,7 +54,7 @@ public class ContoCorrente {
     }
 
     public Movimento[] mostraMovimenti (){
-        return (Movimento[]) movimenti.toArray();
+        return movimenti.toArray(new Movimento[1]);
     }
 
     public String getCognome() {
