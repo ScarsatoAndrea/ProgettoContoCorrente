@@ -44,20 +44,20 @@ public class Banca {
     public ContoCorrente[] ricercaPerCognome(String cognome){
         int contatore = 0;
         ArrayList<ContoCorrente> c = new ArrayList<>();
-        for (int i = 0; i < conti.size(); i++){
-            if (cognome.equals(conti.get(i).getCognome())){
-               c.add(conti.get(i));
-            }
+        for (ContoCorrente t: conti) {
+            if(cognome.equals(t.getCognome()))
+                c.add(t);
         }
         if (c.isEmpty()){
             System.out.println("Conto inesistente");
             return null;
         }
 
-        return (ContoCorrente[]) c.toArray();
+        ContoCorrente[] t = new ContoCorrente[1];
+        return c.toArray(t);
     }
 
-    public ContoCorrente[] mostraConti (){
-        return (ContoCorrente[]) conti.toArray();
+    public ArrayList<ContoCorrente> mostraConti (){
+        return conti;
     }
 }

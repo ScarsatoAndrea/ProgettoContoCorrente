@@ -9,6 +9,7 @@ import ai.quarta.Banca;
 import ai.quarta.ContoCorrente;
 import ai.quarta.Movimento;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -29,12 +30,10 @@ public class Main {
      * @param b banca da cui prende i conti
      */
     static void mostraConti (Banca b){
-        ContoCorrente[] a;
+        ArrayList<ContoCorrente> a;
         a = b.mostraConti();
-        int i = 0;
-        while(a[i] != null){
-            System.out.println(a[i]);
-            i++;
+        for (ContoCorrente c : a){
+            System.out.println(c);
         }
     }
 
@@ -68,9 +67,13 @@ public class Main {
         Movimento[] m;
         m = c.mostraMovimenti();
         int i = 0;
-        while(m[i] != null){
-            System.out.println(m[i]);
-            i++;
+        try {
+            while (m[i] != null) {
+                System.out.println(m[i]);
+                i++;
+            }
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("fine");
         }
     }
 
