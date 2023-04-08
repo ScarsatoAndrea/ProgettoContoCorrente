@@ -7,6 +7,7 @@ public class ContoCorrente {
     private String nome;
     private String cognome;
     private float saldo;
+    private boolean bloccato;
     private ArrayList<Movimento> movimenti;
 
     /**
@@ -23,6 +24,7 @@ public class ContoCorrente {
         this.nome = nome;
         this.cognome = cognome;
         this.saldo = 0;
+        this.bloccato = false;
         this.movimenti = new ArrayList<Movimento>();
     }
 
@@ -32,7 +34,9 @@ public class ContoCorrente {
      * @param importo somma depositata
      * @param descrizione motivo del deposito
      */
-    public void deposita (float importo, String descrizione){
+    public void deposita (float importo, String descrizione) throws ContoBloccatoException {
+        if (bloccato)
+            throw new ContoBloccatoException();
         movimenti.add(new Movimento(descrizione, importo));
         saldo += importo;
     }
@@ -43,13 +47,15 @@ public class ContoCorrente {
      * @param importo somma prelevata
      * @param descrizione motivo del prelievo
      */
-    public void preleva (float importo, String descrizione){
-        if (importo > saldo){
-            System.out.println("Saldo insufficiente");
+    public void preleva (float importo, String descrizione) throws ContoBloccatoException, SaldoNegativoException {
+        saldo -= importo;
+        if (bloccato)
+            throw new ContoBloccatoException();
+        if (saldo <= -100){
+           throw new SaldoNegativoException(importo);
         }
         else{
             movimenti.add(new Movimento(descrizione, -importo));
-            saldo -= importo;
         }
     }
 
@@ -65,11 +71,25 @@ public class ContoCorrente {
         return numeroConto;
     }
 
+    public void bloccaConto() {
+        bloccato = true;
+        movimenti.add(new Movimento("conto bloccato", 0000.0f));
+    }
+
+    public void sbloccaConto() {
+        bloccato = false;
+        movimenti.add(new Movimento("conto sbloccato", 0000.0f));
+        saldo = 0;
+    }
+
     @Override
     public String toString() {
-        return "'" + nome + '\'' +
+        String s = "'" + nome + '\'' +
                 ", '" + cognome + '\'' +
                 ", numero conto: " + numeroConto +
                 ", saldo corrente: " + saldo;
+        if (bloccato)
+            s += ", conto bloccato";
+        return s;
     }
 }

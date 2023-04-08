@@ -5,11 +5,10 @@
  * @version 1.3 18/01/2023
  */
 
-import ai.quarta.Banca;
-import ai.quarta.ContoCorrente;
-import ai.quarta.Movimento;
+import ai.quarta.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -77,6 +76,19 @@ public class Main {
         }
     }
 
+    static void sbloccaConto(ContoCorrente c){
+        Scanner login = new Scanner(System.in);
+        System.out.println("Per sbloccare il conto entrare con l'account da admin");
+        System.out.print("Username: ");
+        if(Objects.equals(login.nextLine(), "admin")){
+            System.out.print("Password: ");
+            if(login.nextLine().equals("admin")){
+                c.sbloccaConto();
+                System.out.println("Conto sbloccato con successo");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Banca b = new Banca();
         datiStub(b);
@@ -131,7 +143,17 @@ public class Main {
                         float tempo = Float.parseFloat(temp);
                         System.out.println("Motivo del prelievo?");
                         String desc = in.nextLine();
-                        a.preleva(tempo, desc);
+                        try {
+                            a.preleva(tempo, desc);
+                        } catch (ContoBloccatoException e) {
+                            System.out.println("Il conto è attualmente bloccato, vuoi sbloccarlo? Y/n");
+                            Scanner risposta = new Scanner(System.in);
+                            if(Objects.equals(risposta.nextLine(), "Y"))
+                                sbloccaConto(a);
+                        } catch (SaldoNegativoException e) {
+                            System.out.println("Il saldo è negativo, il conto verrà bloccato");
+                            a.bloccaConto();
+                        }
                     }
                     else if (scelta2 == 2){
                         System.out.println("Quantità da depositare: ");
@@ -139,7 +161,14 @@ public class Main {
                         float tempo = Float.parseFloat(temp);
                         System.out.println("Motivo del deposito?");
                         String desc = in.nextLine();
-                        a.deposita(tempo, desc);
+                        try {
+                            a.deposita(tempo, desc);
+                        } catch (ContoBloccatoException e) {
+                            System.out.println("Il conto è attualmente bloccato, vuoi sbloccarlo? Y/n");
+                            Scanner risposta = new Scanner(System.in);
+                            if(risposta.nextLine() == "Y")
+                                sbloccaConto(a);
+                        }
                     }
                     else if (scelta2 == 3){
                         mostraMovimenti(a);
