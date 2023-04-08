@@ -90,6 +90,6 @@ public class ContoCorrente {
                 ", saldo corrente: " + saldo;
         if (bloccato)
             s += ", conto bloccato";
-        return s;
+        return s ;
     }
 }
