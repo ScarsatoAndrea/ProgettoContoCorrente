@@ -49,11 +49,11 @@ public class ContoCorrente {
      */
     public void preleva (float importo, String descrizione) throws ContoBloccatoException, SaldoNegativoException {
         saldo -= importo;
+        if (bloccato)
+            throw new ContoBloccatoException();
         if (saldo <= -100){
            throw new SaldoNegativoException(importo);
         }
-        if (bloccato)
-            throw new ContoBloccatoException();
         else{
             movimenti.add(new Movimento(descrizione, -importo));
         }
@@ -71,14 +71,6 @@ public class ContoCorrente {
         return numeroConto;
     }
 
-    @Override
-    public String toString() {
-        return "'" + nome + '\'' +
-                ", '" + cognome + '\'' +
-                ", numero conto: " + numeroConto +
-                ", saldo corrente: " + saldo;
-    }
-
     public void bloccaConto() {
         bloccato = true;
         movimenti.add(new Movimento("conto bloccato", 0000.0f));
@@ -88,5 +80,16 @@ public class ContoCorrente {
         bloccato = false;
         movimenti.add(new Movimento("conto sbloccato", 0000.0f));
         saldo = 0;
+    }
+
+    @Override
+    public String toString() {
+        String s = "'" + nome + '\'' +
+                ", '" + cognome + '\'' +
+                ", numero conto: " + numeroConto +
+                ", saldo corrente: " + saldo;
+        if (bloccato)
+            s += ", conto bloccato";
+        return s;
     }
 }

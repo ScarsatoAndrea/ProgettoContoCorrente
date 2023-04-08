@@ -8,6 +8,7 @@
 import ai.quarta.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -79,11 +80,11 @@ public class Main {
         Scanner login = new Scanner(System.in);
         System.out.println("Per sbloccare il conto entrare con l'account da admin");
         System.out.print("Username: ");
-        if(login.nextLine() == "admin"){
-            System.out.println();
+        if(Objects.equals(login.nextLine(), "admin")){
             System.out.print("Password: ");
-            if(login.nextLine() == "admin"){
+            if(login.nextLine().equals("admin")){
                 c.sbloccaConto();
+                System.out.println("Conto sbloccato con successo");
             }
         }
     }
@@ -147,7 +148,7 @@ public class Main {
                         } catch (ContoBloccatoException e) {
                             System.out.println("Il conto è attualmente bloccato, vuoi sbloccarlo? Y/n");
                             Scanner risposta = new Scanner(System.in);
-                            if(risposta.nextLine() == "Y")
+                            if(Objects.equals(risposta.nextLine(), "Y"))
                                 sbloccaConto(a);
                         } catch (SaldoNegativoException e) {
                             System.out.println("Il saldo è negativo, il conto verrà bloccato");
